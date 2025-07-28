@@ -9,10 +9,10 @@
 <body>
   <div class="hero" style="background-image: url('images/hand.jpg');">
     <img src="images/doe-logo.png" alt="Doe Coin Logo" class="logo"/>
-    <button class="wallet">Add to MetaMask</button>
+    <button class="wallet" onclick="addToken()">Add to MetaMask</button>
     <h1>DOE COIN</h1>
     <h2>CULTURE OVER CAPITAL.</h2>
-    <a href="#" class="button">VIEW CONTRACT</a>
+    <a href="https://bscscan.com/token/0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84" target="_blank" class="button">VIEW CONTRACT</a>
   </div>
 
   <div class="section what">
@@ -42,5 +42,32 @@
       <img src="images/mask4.png" />
     </div>
   </div>
+
+  <script>
+    async function addToken() {
+      try {
+        const wasAdded = await window.ethereum.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: '0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84',
+              symbol: 'DOE',
+              decimals: 18,
+              image: 'https://jay19891208.github.io/doecoin.github.io/images/doe-logo.png',
+            },
+          },
+        });
+
+        if (wasAdded) {
+          console.log('Token añadido a MetaMask');
+        } else {
+          console.log('El usuario canceló');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  </script>
 </body>
 </html>
