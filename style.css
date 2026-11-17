@@ -107,3 +107,4 @@ footer { background: #000; padding: 30px 20px; text-align: center; color: #aaa; 
   .wallet { padding: 6px 10px; font-size: 13px; }
   .masks-row img { width: 45%; }
 }
+footer a { color: orange; }
