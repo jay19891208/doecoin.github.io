@@ -2,72 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Doe Coin</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doe Coin (DOE) · Culture over capital</title>
+  <meta name="description" content="Doe Coin (DOE) is a community token on BNB Smart Chain inspired by urban culture, reggaeton and street style." />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <meta property="og:title" content="Doe Coin (DOE)" />
+  <meta property="og:description" content="Culture over capital. A community token on BNB Smart Chain." />
+  <meta property="og:image" content="https://jay19891208.github.io/doecoin.github.io/images/doe-gold.png" />
+  <meta property="og:url" content="https://jay19891208.github.io/doecoin.github.io" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="hero" style="background-image: url('images/hand.jpg');">
-    <img src="images/doe-logo.png" alt="Doe Coin Logo" class="logo"/>
-    <button class="wallet" onclick="addToken()">Add to MetaMask</button>
+  <header class="topbar">
+    <img src="images/doe-logo.png" alt="Doe Coin" class="logo" />
+    <button class="wallet" id="addToken" type="button">Add DOE to MetaMask</button>
+  </header>
+
+  <section class="hero" style="background-image: linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.85)), url('images/hand.jpg');">
     <h1>DOE COIN</h1>
     <h2>CULTURE OVER CAPITAL.</h2>
-    <a href="https://bscscan.com/token/0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84" target="_blank" class="button">VIEW CONTRACT</a>
-  </div>
-
-  <div class="section what">
-    <div class="text">
-      <h3>WHAT IS DOE COIN?</h3>
-      <img src="images/doe-gold.png" alt="Coin"/>
+    <div class="cta">
+      <a href="https://bscscan.com/token/0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84" target="_blank" rel="noopener" class="button">VIEW CONTRACT</a>
+      <a href="https://pancakeswap.finance/swap?outputCurrency=0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84&chain=bsc" target="_blank" rel="noopener" class="button ghost">TRADE ON PANCAKESWAP</a>
     </div>
-    <div class="text">
-      <h3>IT’S <em>NOT</em> OA COIN?</h3>
-      <p>
-        It’s not just a cryptocurrency — it’s a movement inspired by the urban scenes, reggaeton vibes and street style. Doe Coin is your ticket to an exclusive world where culture comes first.
-      </p>
-      <ul>
-        <li>✔ Access drops on exclusive merch</li>
-        <li>✔ Unlock VIP experiences</li>
-        <li>✔ Claim rewards and more</li>
-      </ul>
-    </div>
-  </div>
+    <p class="wallet-msg" id="walletMsg" role="status"></p>
+  </section>
 
-  <div class="section masks">
+  <section class="section what">
+    <img src="images/doe-gold.png" alt="DOE coin" class="coin" />
+    <h3>WHAT IS DOE COIN?</h3>
+    <p class="lead"><strong>It’s not just a coin.</strong> It’s a movement inspired by urban scenes, reggaeton vibes and street style. Doe Coin is your ticket to a world where culture comes first.</p>
+    <ul>
+      <li>✔ Access drops on exclusive merch</li>
+      <li>✔ Unlock VIP experiences</li>
+      <li>✔ Claim rewards and more</li>
+    </ul>
+  </section>
+
+  <section class="section token">
+    <h3>TOKEN INFO</h3>
+    <dl>
+      <div><dt>Network</dt><dd>BNB Smart Chain (BEP-20)</dd></div>
+      <div><dt>Symbol</dt><dd>DOE</dd></div>
+      <div><dt>Decimals</dt><dd>18</dd></div>
+      <div class="full">
+        <dt>Contract</dt>
+        <dd><code id="contract">0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84</code>
+          <button type="button" class="copy" id="copyBtn">Copy</button></dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section masks">
     <h3>LA MÁSCARA DE MIAMI</h3>
     <div class="masks-row">
-      <img src="images/mask1.png" />
-      <img src="images/mask2.png" />
-      <img src="images/mask3.png" />
-      <img src="images/mask4.png" />
+      <img src="images/mask1.jpg" alt="La Máscara de Miami 1" loading="lazy" />
+      <img src="images/mask2.jpg" alt="La Máscara de Miami 2" loading="lazy" />
+      <img src="images/mask3.jpg" alt="La Máscara de Miami 3" loading="lazy" />
+      <img src="images/mask4.jpg" alt="La Máscara de Miami 4" loading="lazy" />
     </div>
-  </div>
+  </section>
+
+  <footer>
+    <p class="disclaimer">DOE is a community token made for fun and culture. It is not an investment and comes with no promise of value or returns. Crypto prices are volatile: never spend more than you can afford to lose. Always check that the contract address matches the one above.</p>
+    <p>© Doe Coin · jay19891208.github.io/doecoin.github.io</p>
+  </footer>
 
   <script>
-    async function addToken() {
+    const DOE = '0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84';
+    const BSC = {
+      chainId: '0x38',
+      chainName: 'BNB Smart Chain',
+      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+      rpcUrls: ['https://bsc-dataseed.binance.org/'],
+      blockExplorerUrls: ['https://bscscan.com/'],
+    };
+    const msg = (t) => { document.getElementById('walletMsg').textContent = t; };
+
+    async function switchToBsc() {
       try {
-        const wasAdded = await window.ethereum.request({
+        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: BSC.chainId }] });
+      } catch (err) {
+        if (err.code === 4902) {
+          await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [BSC] });
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    async function addToken() {
+      if (!window.ethereum) {
+        msg('MetaMask not found. Install MetaMask or open this page in the MetaMask app browser.');
+        return;
+      }
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        await switchToBsc();
+        const added = await window.ethereum.request({
           method: 'wallet_watchAsset',
           params: {
             type: 'ERC20',
-            options: {
-              address: '0x645225f4FF07E20417cC7eF0cB6AD17AEB089f84',
-              symbol: 'DOE',
-              decimals: 18,
-              image: 'https://jay19891208.github.io/doecoin.github.io/images/doe-logo.png',
-            },
+            options: { address: DOE, symbol: 'DOE', decimals: 18, image: 'https://jay19891208.github.io/doecoin.github.io/images/doe-token.png' },
           },
         });
-
-        if (wasAdded) {
-          console.log('Token añadido a MetaMask');
-        } else {
-          console.log('El usuario canceló');
-        }
-      } catch (error) {
-        console.log(error);
+        msg(added ? 'DOE added to MetaMask on BNB Smart Chain.' : 'Cancelled.');
+      } catch (err) {
+        console.error(err);
+        msg('Could not add DOE: ' + (err.message || err));
       }
     }
+
+    document.getElementById('addToken').addEventListener('click', addToken);
+    document.getElementById('copyBtn').addEventListener('click', async (e) => {
+      try { await navigator.clipboard.writeText(DOE); e.target.textContent = 'Copied!'; }
+      catch { e.target.textContent = 'Select & copy'; }
+      setTimeout(() => { e.target.textContent = 'Copy'; }, 2000);
+    });
   </script>
 </body>
 </html>
